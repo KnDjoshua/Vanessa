@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Water Wonders – Liquid Conservation for Little Scientists</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: sans-serif; background: #e0f7fa; text-align: center; }
+    .game-container { max-width: 800px; margin: auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+    .cup, .bottle, .pitcher, .container { width: 100px; height: 150px; border: 2px solid #00bcd4; border-radius: 8px; margin: 10px auto; position: relative; background: #fff; }
+    .water { position: absolute; bottom: 0; width: 100%; background: #03a9f4; transition: height 1s ease; }
+    .tools, .nav-buttons, .feedback, .characters { margin-top: 20px; }
+    .nav-buttons button { margin: 5px; padding: 10px; background: #009688; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .nav-buttons button:hover { background: #00796b; }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Water Wonders – Liquid Conservation for Little Scientists</h1>
+    <div id="game-content"></div>
+    <div class="nav-buttons">
+      <button onclick="startLevel(1)">Level 1: Copy Me!</button>
+      <button onclick="startLevel(2)">Level 2: Magic Growing Cup</button>
+      <button onclick="startLevel(3)">Level 3: Scoop Detective</button>
+      <button onclick="startLevel(4)">Level 4: Tricky Choices</button>
+      <button onclick="startLevel(5)">Level 5: Water Sharing Party</button>
+    </div>
+  </div>
+  <script>
+    const gameContent = document.getElementById('game-content');
+
+    function startLevel(level) {
+      switch(level) {
+        case 1:
+          gameContent.innerHTML = `
+            <h2>Level 1: Copy Me!</h2>
+            <div class="cup" id="cupA"><div class="water" style="height:70%"></div></div>
+            <div class="cup" id="cupB"><div class="water" style="height:0%"></div></div>
+            <button onclick="pourWater('cupA', 'cupB')">Copy MKO Pour</button>
+            <div class="feedback" id="feedback1"></div>`;
+          break;
+
+        case 2:
+          gameContent.innerHTML = `
+            <h2>Level 2: Magic Growing Cup!</h2>
+            <div class="cup" id="shortCup"><div class="water" style="height:70%"></div><p>Short & Wide</p></div>
+            <div class="cup" id="tallCup"><div class="water" style="height:0%"></div><p>Tall & Thin</p></div>
+            <button onclick="pourWater('shortCup', 'tallCup')">Pour Water</button>
+            <div class="feedback" id="feedback2"></div>`;
+          break;
+
+        case 3:
+          gameContent.innerHTML = `
+            <h2>Level 3: Scoop Detective</h2>
+            <div class="bottle" id="bottle"></div>
+            <button onclick="scoopBottle()">Scoop</button>
+            <div class="feedback" id="feedback3">Scoop count: <span id="scoopCount">0</span></div>`;
+          scoopCounter = 0;
+          break;
+
+        case 4:
+          gameContent.innerHTML = `
+            <h2>Level 4: Tricky Choices</h2>
+            <div class="container" id="cA"><div class="water" style="height:60%"></div><p>Container A</p></div>
+            <div class="container" id="cB"><div class="water" style="height:60%"></div><p>Container B</p></div>
+            <div class="container" id="cC"><div class="water" style="height:40%"></div><p>Container C</p></div>
+            <button onclick="guessContainers()">Guess which hold the same</button>
+            <div class="feedback" id="feedback4"></div>`;
+          break;
+
+        case 5:
+          gameContent.innerHTML = `
+            <h2>Level 5: Water Sharing Party!</h2>
+            <div class="pitcher" id="pitcher"><div class="water" style="height:100%"></div><p>Big Pitcher</p></div>
+            <div class="cup" id="friend1"><div class="water" style="height:0%"></div><p>Friend 1</p></div>
+            <div class="cup" id="friend2"><div class="water" style="height:0%"></div><p>Friend 2</p></div>
+            <button onclick="shareWater()">Share Water</button>
+            <div class="feedback" id="feedback5"></div>`;
+          break;
+      }
+    }
+
+    function pourWater(fromId, toId) {
+      const from = document.getElementById(fromId).querySelector('.water');
+      const to = document.getElementById(toId).querySelector('.water');
+      const height = from.style.height;
+      to.style.height = height;
+      document.querySelector('.feedback').textContent = '✅ Great job!';
+    }
+
+    let scoopCounter = 0;
+    function scoopBottle() {
+      scoopCounter++;
+      document.getElementById('scoopCount').textContent = scoopCounter;
+      if (scoopCounter === 4) {
+        document.getElementById('feedback3').innerHTML += ' ✅ Correct! It holds 4 scoops!';
+      } else if (scoopCounter > 4) {
+        document.getElementById('feedback3').innerHTML += ' ❌ Too much!';
+      }
+    }
+
+    function guessContainers() {
+      document.getElementById('feedback4').textContent = '✅ A and B hold the same! Great thinking!';
+    }
+
+    function shareWater() {
+      const friend1 = document.getElementById('friend1').querySelector('.water');
+      const friend2 = document.getElementById('friend2').querySelector('.water');
+      friend1.style.height = '50%';
+      friend2.style.height = '50%';
+      document.getElementById('feedback5').textContent = '✅ Both friends are happy! Well done!';
+    }
+  </script>
+</body>
+</html>
