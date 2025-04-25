@@ -1,319 +1,1068 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Water Wonders – Liquid Conservation for Little Scientists</title>
-  <style>
-    body { 
-      font-family: 'Comic Sans MS', cursive, sans-serif; 
-      background: #e0f7fa; 
-      text-align: center; 
-      margin: 0;
-      padding: 20px;
-      background-image: url('https://img.freepik.com/free-vector/hand-drawn-science-background_23-2148499325.jpg');
-      background-size: cover;
-    }
-    
-    .game-container { 
-      max-width: 800px; 
-      margin: 20px auto; 
-      padding: 20px; 
-      background: rgba(255,255,255,0.9); 
-      border-radius: 20px; 
-      box-shadow: 0 0 20px rgba(0,0,0,0.3); 
-      border: 5px solid #00bcd4;
-    }
-    
-    h1 {
-      color: #006064;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-      font-size: 2.2em;
-    }
-    
-    h2 {
-      color: #00838f;
-      margin-bottom: 30px;
-    }
-    
-    .container-group {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-      margin: 30px 0;
-    }
-    
-    .cup, .bottle, .pitcher, .container { 
-      width: 100px; 
-      height: 200px; 
-      border: 3px solid #00bcd4; 
-      border-radius: 0 0 15px 15px; 
-      margin: 10px auto; 
-      position: relative; 
-      background: #fff;
-      box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column-reverse;
-    }
-    
-    .measurements {
-      position: absolute;
-      left: -25px;
-      height: 100%;
-      display: flex;
-      flex-direction: column-reverse;
-      justify-content: space-between;
-    }
-    
-    .measurement-mark {
-      position: relative;
-      width: 20px;
-      text-align: right;
-      font-size: 12px;
-      color: #555;
-    }
-    
-    .measurement-line {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      width: 5px;
-      height: 1px;
-      background: #777;
-    }
-    
-    .water { 
-      width: 100%; 
-      background: linear-gradient(to bottom, #03a9f4, #4fc3f7); 
-      transition: height 0.5s ease; 
-      border-radius: 0 0 12px 12px;
-      box-shadow: inset 0 -10px 20px rgba(0,0,0,0.1);
-      opacity: 0.8;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .water:after {
-      content: "";
-      position: absolute;
-      top: -10px;
-      left: -20%;
-      width: 140%;
-      height: 20px;
-      background: rgba(255,255,255,0.3);
-      transform: rotate(-2deg);
-      border-radius: 50%;
-    }
-    
-    .tools, .nav-buttons, .feedback, .characters { margin-top: 20px; }
-    
-    .nav-buttons button, .action-btn { 
-      margin: 10px; 
-      padding: 12px 20px; 
-      background: #009688; 
-      color: white; 
-      border: none; 
-      border-radius: 30px; 
-      cursor: pointer; 
-      font-size: 16px;
-      font-weight: bold;
-      box-shadow: 0 4px 0 #00695c;
-      transition: all 0.2s;
-    }
-    
-    .nav-buttons button:hover, .action-btn:hover { 
-      background: #00796b; 
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 #00695c;
-    }
-    
-    .nav-buttons button:active, .action-btn:active { 
-      transform: translateY(4px);
-      box-shadow: none;
-    }
-    
-    .feedback {
-      min-height: 30px;
-      font-size: 18px;
-      font-weight: bold;
-      margin: 20px;
-      padding: 15px;
-      border-radius: 10px;
-      background: #e8f5e9;
-      color: #2e7d32;
-      border: 2px dashed #81c784;
-    }
-    
-    .character {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 120px;
-      z-index: 100;
-    }
-    
-    .character img {
-      width: 100%;
-    }
-    
-    .bubble {
-      position: absolute;
-      bottom: 120px;
-      right: 130px;
-      background: white;
-      padding: 10px 15px;
-      border-radius: 20px;
-      width: 200px;
-      box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-      animation: bubbleFloat 2s infinite alternate;
-    }
-    
-    @keyframes bubbleFloat {
-      from { transform: translateY(0); }
-      to { transform: translateY(-10px); }
-    }
-    
-    .splash {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: rgba(255,255,255,0.7);
-      border-radius: 50%;
-      pointer-events: none;
-      animation: splash 0.5s forwards;
-    }
-    
-    @keyframes splash {
-      0% { transform: scale(0); opacity: 1; }
-      100% { transform: scale(3); opacity: 0; }
-    }
-    
-    .level-complete {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      animation: fadeIn 0.5s;
-    }
-    
-    .level-complete-content {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      max-width: 400px;
-      animation: bounceIn 0.7s;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    @keyframes bounceIn {
-      0% { transform: scale(0.5); opacity: 0; }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    
-    .celebration {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 999;
-    }
-    
-    .confetti {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: #f00;
-      opacity: 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Wonders</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #87CEEB;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        #main-menu, #level-select, #game-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s;
+        }
+        
+        #main-menu {
+            background-color: #5F9EA0;
+            z-index: 10;
+        }
+        
+        #level-select {
+            background-color: #4682B4;
+            z-index: 5;
+            display: none;
+        }
+        
+        #game-screen {
+            background-color: #ADD8E6;
+            z-index: 1;
+            display: none;
+        }
+        
+        .title {
+            font-size: 3rem;
+            color: #FFD700;
+            text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+            margin-bottom: 2rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .btn {
+            background-color: #FF6347;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            margin: 10px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #8B0000;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 0 #8B0000;
+        }
+        
+        .btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 0px 0 #8B0000;
+        }
+        
+        .level-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #FFD700;
+            color: #8B4513;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 0 #8B4513;
+            cursor: pointer;
+        }
+        
+        .level-btn.locked {
+            background-color: #A9A9A9;
+            color: #696969;
+            box-shadow: 0 5px 0 #696969;
+            cursor: not-allowed;
+        }
+        
+        .level-btn.unlocked:hover {
+            transform: scale(1.1);
+        }
+        
+        .level-island {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            background-color: #8FBC8F;
+            border-radius: 50%;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 0 #556B2F;
+        }
+        
+        .container {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 3px solid #000;
+            border-radius: 10px;
+            cursor: grab;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: hidden;
+            transform-origin: bottom center;
+            transition: transform 0.2s;
+        }
+        
+        .water {
+            width: 100%;
+            background-color: #1E90FF;
+            transition: height 0.5s;
+        }
+        
+        .tool {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+        
+        .tool:hover {
+            transform: scale(1.1);
+        }
+        
+        #drippy {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+        
+        #speech-bubble {
+            position: absolute;
+            background-color: white;
+            border-radius: 20px;
+            padding: 15px;
+            max-width: 200px;
+            bottom: 130px;
+            left: 130px;
+            display: none;
+            font-size: 1.2rem;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+            z-index: 110;
+        }
+        
+        .star {
+            position: absolute;
+            color: gold;
+            font-size: 2rem;
+            opacity: 0;
+            transform: scale(0);
+            animation: star-pop 0.5s forwards;
+            z-index: 50;
+        }
+        
+        @keyframes star-pop {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0;
+            z-index: 40;
+        }
+        
+        #back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+        
+        #level-indicator {
+            position: absolute;
+            top: 20px;
+            font-size: 1.5rem;
+            color: #8B4513;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            border-radius: 50px;
+            z-index: 10;
+        }
+        
+        .measuring-stick {
+            position: absolute;
+            background-color: #8B4513;
+            width: 10px;
+            height: 200px;
+            left: 50px;
+            top: 100px;
+            z-index: 100;
+        }
+        
+        .scoop {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #FFD700;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        #scoop-count {
+            position: absolute;
+            font-size: 1.5rem;
+            color: #8B4513;
+            display: none;
+            top: 100px;
+            left: 50px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            z-index: 10;
+        }
+        
+        #progress-tracker {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            display: none;
+            z-index: 10;
+        }
+        
+        #water-splash {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-image: radial-gradient(circle, rgba(30, 144, 255, 0.8) 0%, rgba(30, 144, 255, 0) 70%);
+            border-radius: 50%;
+            display: none;
+            z-index: 5;
+            animation: splash 0.5s forwards;
+        }
+        
+        @keyframes splash {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
-  <div class="game-container">
-    <h1>Water Wonders – Liquid Conservation for Little Scientists</h1>
-    <div id="game-content"></div>
-    <div class="nav-buttons">
-      <button onclick="startLevel(1)">Level 1: Copy Me!</button>
-      <button onclick="startLevel(2)">Level 2: Magic Growing Cup</button>
-      <button onclick="startLevel(3)">Level 3: Scoop Detective</button>
-      <button onclick="startLevel(4)">Level 4: Tricky Choices</button>
-      <button onclick="startLevel(5)">Level 5: Water Sharing Party</button>
+    <div id="game-container">
+        <!-- Main Menu Screen -->
+        <div id="main-menu">
+            <h1 class="title">Water Wonders!</h1>
+            <button id="play-btn" class="btn">PLAY</button>
+            <button id="parents-btn" class="btn">Parents/Teachers</button>
+        </div>
+        
+        <!-- Level Select Screen -->
+        <div id="level-select">
+            <h1 class="title">Choose a Level!</h1>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+                <div class="level-island">
+                    <div id="level1-btn" class="level-btn unlocked">1</div>
+                </div>
+                <div class="level-island">
+                    <div id="level2-btn" class="level-btn unlocked">2</div>
+                </div>
+                <div class="level-island">
+                    <div id="level3-btn" class="level-btn unlocked">3</div>
+                </div>
+                <div class="level-island">
+                    <div id="level4-btn" class="level-btn unlocked">4</div>
+                </div>
+                <div class="level-island">
+                    <div id="level5-btn" class="level-btn unlocked">5</div>
+                </div>
+            </div>
+            <button id="back-to-menu" class="btn">Back to Menu</button>
+        </div>
+        
+        <!-- Game Screen -->
+        <div id="game-screen">
+            <button id="back-btn" class="btn">← Back</button>
+            <div id="level-indicator">Level 1: Copy Cat Challenge!</div>
+            
+            <!-- Game elements will be added here dynamically -->
+            <div id="water-splash"></div>
+            
+            <img id="drippy" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzFBOURGRiIvPjxjaXJjbGUgY3g9IjM1IiBjeT0iNDAiIHI9IjgiIGZpbGw9IiMwMDAiLz48Y2lyY2xlIGN4PSI2NSIgY3k9IjQwIiByPSI4IiBmaWxsPSIjMDAwIi8+PHBhdGggZD0iTTM1IDY1IHEyMCAxNSA0MCAwIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="Drippy">
+            <div id="speech-bubble"></div>
+            <div id="scoop-count">Scoops: 0</div>
+            <div id="progress-tracker">
+                <h3>Progress</h3>
+                <div id="stars-earned"></div>
+            </div>
+        </div>
     </div>
-  </div>
-  
-  <div class="character">
-    <div class="bubble" id="hint-bubble">Hi! I'm Professor Droplet! Let's learn about water!</div>
-    <img src="https://cdn-icons-png.flaticon.com/512/1864/1864593.png" alt="Professor Droplet">
-  </div>
 
-  <audio id="pour-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-water-sci-fi-bleep-902.mp3"></audio>
-  <audio id="success-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
-  <audio id="splash-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-water-drop-wrong-2036.mp3"></audio>
+    <script>
+        // Game state
+        const gameState = {
+            currentLevel: 1,
+            unlockedLevels: 1,
+            stars: [0, 0, 0, 0, 0], // Stars earned per level
+            drippyMessages: {
+                1: [
+                    "Hi! I'm Drippy! Let's play with water!",
+                    "Click and drag to tilt the cup and pour water!",
+                    "Great job! The water is the same!"
+                ],
+                2: [
+                    "Now try pouring into a different shaped cup!",
+                    "Does it look like more water in the tall glass?",
+                    "See? Same water, different shape!"
+                ],
+                3: [
+                    "Let's measure how much is inside this funny bottle!",
+                    "Click the scoop, then click the bottle to measure!",
+                    "1 scoop... 2 scoops... how many does it hold?"
+                ],
+                4: [
+                    "Which cup do you think holds more water?",
+                    "Pour between them to find out!",
+                    "Surprise! They're the same amount!"
+                ],
+                5: [
+                    "Now share water equally between two friends!",
+                    "Use the scale to check if both have the same!",
+                    "You're a water sharing expert!"
+                ]
+            }
+        };
 
-  <script>
-    const gameContent = document.getElementById('game-content');
-    const hintBubble = document.getElementById('hint-bubble');
-    let currentLevel = 0;
-    let scoopCounter = 0;
-    let scoopLimit = 4;
+        // DOM elements
+        const mainMenu = document.getElementById('main-menu');
+        const levelSelect = document.getElementById('level-select');
+        const gameScreen = document.getElementById('game-screen');
+        const playBtn = document.getElementById('play-btn');
+        const parentsBtn = document.getElementById('parents-btn');
+        const backToMenuBtn = document.getElementById('back-to-menu');
+        const backBtn = document.getElementById('back-btn');
+        const levelBtns = [
+            document.getElementById('level1-btn'),
+            document.getElementById('level2-btn'),
+            document.getElementById('level3-btn'),
+            document.getElementById('level4-btn'),
+            document.getElementById('level5-btn')
+        ];
+        const drippy = document.getElementById('drippy');
+        const speechBubble = document.getElementById('speech-bubble');
+        const levelIndicator = document.getElementById('level-indicator');
+        const scoopCount = document.getElementById('scoop-count');
+        const progressTracker = document.getElementById('progress-tracker');
+        const starsEarned = document.getElementById('stars-earned');
+        const waterSplash = document.getElementById('water-splash');
 
-    function playSound(id) {
-      const sound = document.getElementById(id);
-      sound.currentTime = 0;
-      sound.play();
-    }
+        // Game variables
+        let containers = [];
+        let tools = [];
+        let activeTool = null;
+        let currentStep = 0;
+        let scoopsUsed = 0;
+        let isDragging = false;
+        let draggedContainer = null;
+        let startAngle = 0;
+        let success = false;
+        let pourInterval = null;
 
-    function createSplash(x, y) {
-      const splash = document.createElement('div');
-      splash.className = 'splash';
-      splash.style.left = `${x}px`;
-      splash.style.top = `${y}px`;
-      document.body.appendChild(splash);
-      setTimeout(() => splash.remove(), 500);
-    }
+        // Initialize game
+        function initGame() {
+            // Event listeners
+            playBtn.addEventListener('click', showLevelSelect);
+            parentsBtn.addEventListener('click', showParentInfo);
+            backToMenuBtn.addEventListener('click', showMainMenu);
+            backBtn.addEventListener('click', showLevelSelect);
+            
+            // Level buttons
+            levelBtns.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    if (index + 1 <= gameState.unlockedLevels) {
+                        startLevel(index + 1);
+                    }
+                });
+            });
+            
+            // Make Drippy interactive
+            drippy.addEventListener('click', () => {
+                showDrippyMessage();
+            });
+            
+            // For testing - unlock all levels
+            gameState.unlockedLevels = 5;
+            updateLevelSelect();
+        }
 
-    function showCelebration() {
-      const celebration = document.createElement('div');
-      celebration.className = 'celebration';
-      
-      // Create confetti
-      for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = `${Math.random() * 100}%`;
-        confetti.style.top = `${Math.random() * 100}%`;
-        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-        confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
-        
-        // Create animation
-        const animation = document.createElement('style');
-        animation.textContent = `
-          @keyframes fall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg); opacity: 0; }
-          }
-        `;
-        document.head.appendChild(animation);
-        
-        celebration.appendChild(confetti);
-      }
-      
-      document.body.appendChild(celebration);
-      setTimeout(() => celebration.remove(), 3000);
-    }
+        // Show main menu
+        function showMainMenu() {
+            mainMenu.style.display = 'flex';
+            levelSelect.style.display = 'none';
+            gameScreen.style.display = 'none';
+        }
 
-    function showLevelComplete() {
-      playSound
+        // Show level select
+        function showLevelSelect() {
+            mainMenu.style.display = 'none';
+            levelSelect.style.display = 'flex';
+            gameScreen.style.display = 'none';
+            updateLevelSelect();
+        }
+
+        // Show parent info (simplified)
+        function showParentInfo() {
+            alert("Water Wonders teaches liquid conservation - the understanding that amount stays the same despite container shape. Designed for ages 4-6.");
+        }
+
+        // Update level select screen
+        function updateLevelSelect() {
+            levelBtns.forEach((btn, index) => {
+                if (index + 1 <= gameState.unlockedLevels) {
+                    btn.classList.remove('locked');
+                    btn.classList.add('unlocked');
+                } else {
+                    btn.classList.add('locked');
+                    btn.classList.remove('unlocked');
+                }
+            });
+            
+            // Update progress display
+            let starsHTML = '';
+            for (let i = 0; i < 5; i++) {
+                starsHTML += `Level ${i+1}: `;
+                for (let j = 0; j < 3; j++) {
+                    starsHTML += `<span style="color: ${j < gameState.stars[i] ? 'gold' : 'gray'}">★</span> `;
+                }
+                starsHTML += '<br>';
+            }
+            starsEarned.innerHTML = starsHTML;
+        }
+
+        // Start a level
+        function startLevel(level) {
+            gameState.currentLevel = level;
+            mainMenu.style.display = 'none';
+            levelSelect.style.display = 'none';
+            gameScreen.style.display = 'flex';
+            
+            // Clear previous level
+            clearGameScreen();
+            
+            // Set up level
+            switch(level) {
+                case 1: setupLevel1(); break;
+                case 2: setupLevel2(); break;
+                case 3: setupLevel3(); break;
+                case 4: setupLevel4(); break;
+                case 5: setupLevel5(); break;
+            }
+            
+            currentStep = 0;
+            success = false;
+            showDrippyMessage();
+        }
+
+        // Clear game screen
+        function clearGameScreen() {
+            // Remove all containers and tools
+            const gameElements = document.querySelectorAll('.container, .tool, .star, .confetti, .measuring-stick, .scoop');
+            gameElements.forEach(el => el.remove());
+            
+            containers = [];
+            tools = [];
+            activeTool = null;
+            scoopsUsed = 0;
+            scoopCount.style.display = 'none';
+            
+            // Clear any pour intervals
+            if (pourInterval) {
+                clearInterval(pourInterval);
+                pourInterval = null;
+            }
+            
+            // Reset level indicator
+            const levelTitles = [
+                "Level 1: Copy Cat Challenge!",
+                "Level 2: Magic Cup Trick!",
+                "Level 3: Scoop Detective!",
+                "Level 4: The Great Water Guess!",
+                "Level 5: Water Sharing Party!"
+            ];
+            levelIndicator.textContent = levelTitles[gameState.currentLevel - 1];
+        }
+
+        // Show Drippy message
+        function showDrippyMessage() {
+            if (currentStep < gameState.drippyMessages[gameState.currentLevel].length) {
+                speechBubble.textContent = gameState.drippyMessages[gameState.currentLevel][currentStep];
+                speechBubble.style.display = 'block';
+                
+                // Hide after 4 seconds
+                setTimeout(() => {
+                    speechBubble.style.display = 'none';
+                }, 4000);
+                
+                currentStep++;
+            }
+        }
+
+        // Create a container
+        function createContainer(x, y, width, height, waterHeight, id, shape = 'rect') {
+            const container = document.createElement('div');
+            container.className = 'container';
+            container.id = id;
+            container.style.width = `${width}px`;
+            container.style.height = `${height}px`;
+            container.style.left = `${x}px`;
+            container.style.top = `${y}px`;
+            
+            if (shape === 'round') {
+                container.style.borderRadius = '50%';
+            } else if (shape === 'star') {
+                // Simplified star shape
+                container.style.clipPath = 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)';
+            }
+            
+            const water = document.createElement('div');
+            water.className = 'water';
+            water.style.height = `${waterHeight}%`;
+            
+            container.appendChild(water);
+            gameScreen.appendChild(container);
+            
+            // Add drag events
+            container.addEventListener('mousedown', startDrag);
+            container.addEventListener('touchstart', startDrag, { passive: false });
+            
+            containers.push({
+                element: container,
+                water: water,
+                width: width,
+                height: height,
+                waterLevel: waterHeight,
+                id: id,
+                originalX: x,
+                originalY: y,
+                shape: shape
+            });
+            
+            return container;
+        }
+
+        // Start dragging a container
+        function startDrag(e) {
+            e.preventDefault();
+            isDragging = true;
+            draggedContainer = e.target.closest('.container');
+            
+            // Bring to front
+            draggedContainer.style.zIndex = '100';
+            
+            // Get container data
+            const containerData = containers.find(c => c.element === draggedContainer);
+            
+            // For rotation calculation
+            const rect = draggedContainer.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Get click position relative to container center
+            const clientX = e.clientX || e.touches[0].clientX;
+            const clientY = e.clientY || e.touches[0].clientY;
+            const clickX = clientX - centerX;
+            const clickY = clientY - centerY;
+            
+            startAngle = Math.atan2(clickY, clickX);
+            
+            document.addEventListener('mousemove', dragContainer);
+            document.addEventListener('touchmove', dragContainer, { passive: false });
+            document.addEventListener('mouseup', stopDrag);
+            document.addEventListener('touchend', stopDrag);
+        }
+
+        // Drag container
+        function dragContainer(e) {
+            if (!isDragging) return;
+            
+            e.preventDefault();
+            const clientX = e.clientX || e.touches[0].clientX;
+            const clientY = e.clientY || e.touches[0].clientY;
+            
+            // Calculate rotation angle
+            const rect = draggedContainer.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Get current mouse position relative to center
+            const mouseX = clientX - centerX;
+            const mouseY = clientY - centerY;
+            
+            const angle = Math.atan2(mouseY, mouseX) - startAngle;
+            
+            // Limit rotation to prevent upside-down containers
+            const maxAngle = Math.PI/2; // 90 degrees
+            const limitedAngle = Math.max(-maxAngle, Math.min(maxAngle, angle));
+            
+            // Rotate container
+            draggedContainer.style.transform = `rotate(${limitedAngle}rad)`;
+            
+            // Start pouring if tilted enough
+            if (Math.abs(limitedAngle) > 0.3 && !pourInterval) {
+                startPouring();
+            } else if (Math.abs(limitedAngle) <= 0.3 && pourInterval) {
+                stopPouring();
+            }
+        }
+
+        // Start pouring animation
+        function startPouring() {
+            const containerData = containers.find(c => c.element === draggedContainer);
+            if (!containerData || containerData.waterLevel <= 0) return;
+            
+            // Create splash effect at pour point
+            const rect = draggedContainer.getBoundingClientRect();
+            const pourX = rect.left + rect.width * 0.8;
+            const pourY = rect.top + rect.height * 0.7;
+            
+            waterSplash.style.left = `${pourX}px`;
+            waterSplash.style.top = `${pourY}px`;
+            waterSplash.style.display = 'block';
+            waterSplash.style.animation = 'none';
+            void waterSplash.offsetWidth; // Trigger reflow
+            waterSplash.style.animation = 'splash 0.5s forwards';
+            
+            // Start pouring interval
+            pourInterval = setInterval(() => {
+                pourWater(draggedContainer);
+            }, 200);
+        }
+
+        // Stop pouring animation
+        function stopPouring() {
+            if (pourInterval) {
+                clearInterval(pourInterval);
+                pourInterval = null;
+            }
+            waterSplash.style.display = 'none';
+        }
+
+        // Stop dragging
+        function stopDrag() {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            draggedContainer.style.transform = 'rotate(0)';
+            draggedContainer.style.zIndex = '1';
+            draggedContainer = null;
+            
+            stopPouring();
+            
+            document.removeEventListener('mousemove', dragContainer);
+            document.removeEventListener('touchmove', dragContainer);
+            document.removeEventListener('mouseup', stopDrag);
+            document.removeEventListener('touchend', stopDrag);
+            
+            // Check level completion
+            setTimeout(checkLevelCompletion, 500);
+        }
+
+        // Pour water from container
+        function pourWater(container) {
+            const containerData = containers.find(c => c.element === container);
+            if (!containerData || containerData.waterLevel <= 0) return;
+            
+            // Find another container to pour into
+            const otherContainers = containers.filter(c => c.element !== container);
+            const rect = container.getBoundingClientRect();
+            const pourX = rect.left + rect.width * 0.8; // Pour from right side
+            const pourY = rect.top + rect.height * 0.7; // Pour from near the top
+            
+            for (const other of otherContainers) {
+                const otherRect = other.element.getBoundingClientRect();
+                if (
+                    pourX > otherRect.left && 
+                    pourX < otherRect.right && 
+                    pourY > otherRect.top && 
+                    pourY < otherRect.bottom
+                ) {
+                    // Calculate pour amount (based on container size)
+                    const pourAmount = Math.min(2, containerData.waterLevel);
+                    
+                    // Update water levels
+                    containerData.waterLevel -= pourAmount;
+                    
+                    // Adjust pour amount based on container sizes
+                    const sizeRatio = (other.width * other.height) / (containerData.width * containerData.height);
+                    other.waterLevel += pourAmount * sizeRatio;
+                    
+                    // Clamp water levels
+                    containerData.waterLevel = Math.max(0, containerData.waterLevel);
+                    other.waterLevel = Math.min(100, other.waterLevel);
+                    
+                    // Update visuals
+                    containerData.water.style.height = `${containerData.waterLevel}%`;
+                    other.water.style.height = `${other.waterLevel}%`;
+                    
+                    // Play sound
+                    playSound('pour');
+                    
+                    // Show splash at target container
+                    const targetX = otherRect.left + otherRect.width/2;
+                    const targetY = otherRect.top + otherRect.height * (1 - other.waterLevel/100);
+                    
+                    waterSplash.style.left = `${targetX}px`;
+                    waterSplash.style.top = `${targetY}px`;
+                    waterSplash.style.display = 'block';
+                    waterSplash.style.animation = 'none';
+                    void waterSplash.offsetWidth; // Trigger reflow
+                    waterSplash.style.animation = 'splash 0.5s forwards';
+                    
+                    break;
+                }
+            }
+        }
+
+        // Create a tool
+        function createTool(type, x, y) {
+            const tool = document.createElement('div');
+            tool.className = 'tool';
+            tool.dataset.type = type;
+            
+            switch(type) {
+                case 'measuring-stick':
+                    tool.style.width = '10px';
+                    tool.style.height = '200px';
+                    tool.style.backgroundColor = '#8B4513';
+                    tool.style.left = `${x}px`;
+                    tool.style.top = `${y}px`;
+                    tool.textContent = 'Measure';
+                    break;
+                    
+                case 'scoop':
+                    tool.style.width = '50px';
+                    tool.style.height = '50px';
+                    tool.style.backgroundColor = '#FFD700';
+                    tool.style.borderRadius = '50%';
+                    tool.style.left = `${x}px`;
+                    tool.style.top = `${y}px`;
+                    tool.textContent = 'Scoop';
+                    break;
+                    
+                case 'scale':
+                    tool.style.width = '100px';
+                    tool.style.height = '20px';
+                    tool.style.backgroundColor = '#A9A9A9';
+                    tool.style.left = `${x}px`;
+                    tool.style.top = `${y}px`;
+                    tool.textContent = 'Scale';
+                    break;
+            }
+            
+            tool.addEventListener('click', () => {
+                useTool(type);
+            });
+            
+            gameScreen.appendChild(tool);
+            tools.push(tool);
+        }
+
+        // Use a tool
+        function useTool(type) {
+            activeTool = type;
+            
+            switch(type) {
+                case 'measuring-stick':
+                    showMeasuringStick();
+                    break;
+                    
+                case 'scoop':
+                    scoopCount.style.display = 'block';
+                    scoopsUsed = 0;
+                    scoopCount.textContent = `Scoops: ${scoopsUsed}`;
+                    break;
+                    
+                case 'scale':
+                    checkWaterEquality();
+                    break;
+            }
+        }
+
+        // Show measuring stick
+        function showMeasuringStick() {
+            const stick = document.createElement('div');
+            stick.className = 'measuring-stick';
+            stick.style.display = 'block';
+            
+            stick.addEventListener('click', () => {
+                stick.remove();
+                activeTool = null;
+            });
+            
+            gameScreen.appendChild(stick);
+        }
+
+        // Check water equality (for scales)
+        function checkWaterEquality() {
+            if (containers.length < 2) return;
+            
+            const threshold = 5; // Allow small difference
+            
+            let allEqual = true;
+            for (let i = 1; i < containers.length; i++) {
+                if (Math.abs(containers[i].waterLevel - containers[0].waterLevel) > threshold) {
+                    allEqual = false;
+                    break;
+                }
+            }
+            
+            if (allEqual) {
+                levelCompleted();
+            } else {
+                showDrippyMessage();
+                playSound('error');
+            }
+        }
+
+        // Check level completion
+        function checkLevelCompletion() {
+            if (success) return;
+            
+            switch(gameState.currentLevel) {
+                case 1:
+                    // Check if water is poured to the other identical container
+                    if (containers[0].waterLevel < 50 && containers[1].waterLevel > 50) {
+                        levelCompleted();
+                    }
+                    break;
+                    
+                case 2:
+                    // Check if water is poured to the different container
+                    if (containers[0].waterLevel < 50 && containers[1].waterLevel > 30) {
+                        levelCompleted();
+                    }
+                    break;
+                    
+                case 3:
+                    // Check if scoops are used (handled separately)
+                    break;
+                    
+                case 4:
+                    // Check if water is distributed between containers
+                    if (containers[0].waterLevel < 60 && 
+                        containers[1].waterLevel > 20 && 
+                        containers[2].waterLevel > 20) {
+                        levelCompleted();
+                    }
+                    break;
+                    
+                case 5:
+                    // Check if water is split equally
+                    if (containers[1].waterLevel > 45 && containers[2].waterLevel > 45) {
+                        levelCompleted();
+                    }
+                    break;
+            }
+        }
+
+        // Level completed
+        function levelCompleted() {
+            success = true;
+            
+            // Award stars (simple version)
+            const stars = Math.min(3, 1 + Math.floor(Math.random() * 3));
+            gameState.stars[gameState.currentLevel - 1] = stars;
+            
+            // Show stars
+            for (let i = 0; i < stars; i++) {
+                createStar(
+                    Math.random() * window.innerWidth,
+                    Math.random() * window.innerHeight / 2
+                );
+            }
+            
+            // Create confetti
+            createConfetti();
+            
+            // Play success sound
+            playSound('success');
+            
+            // Unlock next level
+            if (gameState.currentLevel === gameState.unlockedLevels) {
+                gameState.unlockedLevels = Math.min(5, gameState.unlockedLevels + 1);
+            }
+            
+            // Show Drippy celebration
+            setTimeout(() => {
+                speechBubble.textContent = "Great job! You did it!";
+                speechBubble.style.display = 'block';
+                
+                // Make Drippy jump
+                drippy.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    drippy.style.transform = 'translateY(0)';
+                }, 300);
+            }, 1000);
+            
+            // Show progress
+            progressTracker.style.display = 'block';
+            updateLevelSelect();
+        }
+
+        // Create a star
+        function createStar(x, y) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.innerHTML = '★';
+            star.style.left = `${x}px`;
+            star.style.top = `${y}px`;
+            star.style.fontSize = `${30 + Math.random() * 20}px`;
+            gameScreen.appendChild(star);
+        }
+
+        // Create confetti
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * window.innerWidth}px`;
+                confetti.style.top = `${-10}px`;
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.width = `${10 + Math.random() * 10}px`;
+                confetti.style.height = `${10 + Math.random() * 10}px`;
+                confetti.style.opacity = '1';
+                
+                // Animation
+                confetti.style.transition = `top ${2 + Math.random() * 3}s linear, opacity 1s`;
+                setTimeout(() => {
+                    confetti.style.top = `${window.innerHeight + 10}px`;
+                    confetti.style.opacity = '0';
+                }, 10);
+                
+                gameScreen.appendChild(confetti);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Play sound
+        function playSound(type) {
+            // In a real implementation, you would use actual audio files
+            console.log(`Playing ${type} sound`);
+        }
+
+        // Level setups
+        function setupLevel1() {
+            // Two identical cups
+            createContainer(150, 300, 80, 120, 80, 'cup1');
+            createContainer(450, 300, 80, 120, 0, 'cup2');
+        }
+
+        function setupLevel2() {
+            // Short wide cup and tall narrow glass
+            createContainer(150, 350, 120, 80, 80, 'bowl', 'round');
+            createContainer(450, 250, 60, 160, 0, 'glass');
+            
+            // Add measuring stick tool
+            createTool('measuring-stick', 50, 100);
+        }
+
+        function setupLevel3() {
+            // Funny-shaped bottle and reference cup
+            createContainer(200, 250, 100, 150, 80, 'bottle', 'star');
+            createContainer(500, 300, 80, 120, 0, 'cup');
+            
+            // Add scoop tool
+            createTool('scoop', 50, 100);
+            
+            // Make bottle clickable for scooping
+            const bottle = containers.find(c => c.id === 'bottle');
+            bottle.element.addEventListener('click', () => {
+                if (activeTool === 'scoop' && bottle.waterLevel > 0) {
+                    // Remove some water
+                    bottle.waterLevel = Math.max(0, bottle.waterLevel - 10);
+                    bottle.water.style.height = `${bottle.waterLevel}%`;
+                    
+                    // Add to scoops
+                    scoopsUsed++;
+                    scoopCount.textContent = `Scoops: ${scoopsUsed}`;
+                    
+                    // Check if bottle is empty
+                    if (bottle.waterLevel <= 0) {
+                        setTimeout(() => {
+                            speechBubble.textContent = `The bottle held ${scoopsUsed} scoops!`;
+                            speechBubble.style.display = 'block';
+                            levelCompleted();
+                        }, 1000);
+                    }
+                    
+                    // Play sound
+                    playSound('scoop');
+                }
+            });
+        }
+
+        function setupLevel4() {
+            // Three different containers
+            createContainer(100, 300, 100, 100, 80, 'cup1', 'round');
+            createContainer(350, 300, 60, 160, 0, 'cup2');
+            createContainer(600, 300, 120, 80, 0, 'cup3', 'round');
+        }
+
+        function setupLevel5() {
+            // Large pitcher and two cups
+            createContainer(300, 200, 120, 180, 80, 'pitcher');
+            createContainer(150, 350, 80, 120, 0, 'cup1');
+            createContainer(550, 350, 60, 160, 0, 'cup2');
+            
+            // Add scale tool
+            createTool('scale', 50, 100);
+        }
+
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+</html>
